@@ -3,11 +3,63 @@ import java.util.Scanner ;
 
 public class Jeu
 {   
+    // CONSTRUCTEUR INUTILE
     public Jeu()
     { } 
     
+    // METHODES DE DEPLACEMENT
+    public void moveForward(Ocean sea, double posY)
+    {
+        if ( sea.getPing().getPosition().getOrdonnee() + sea.getPing().getSize() + posY < sea.getHeight() )
+        {
+            sea.getPing().deplacerOrdonnee(posY) ;
+        }
+        else
+        {
+            System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
+        }
+    }
+
+    public void moveBackward(Ocean sea, double posY)
+    {
+        if ( sea.getPing().getPosition().getOrdonnee() > 0 )
+        {
+            sea.getPing().deplacerOrdonnee(-posY) ;
+        }
+        else
+        {
+            System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
+        }
+    }
+
+    public void moveRight(Ocean sea, double posX)
+    {
+        if ( sea.getPing().getPosition().getAbscisse() < sea.getWidth() )
+        {
+            sea.getPing().deplacerAbscisse(posX) ;
+        }
+        else
+        {
+            System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
+        }
+    }
+
+    public void moveLeft(Ocean sea, double posX)
+    {
+        if ( sea.getPing().getPosition().getAbscisse() - sea.getPing().getSize() - posX > 0 )
+        {
+            sea.getPing().deplacerAbscisse(-posX) ;
+        }
+        else
+        {
+            System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
+        }
+    }
+
+    // METHODE DE JEU
     public void jouer()
     {
+        Jeu game = new Jeu() ;
         ArcticImage image = new ArcticImage(500,500) ;
         Ocean sea = new Ocean(4,500,500) ;
         image.setColors(sea.getColors()) ;
@@ -36,100 +88,52 @@ public class Jeu
 
             switch (choix)
             {
+                // AVANCER LE PINGOUIN
                 case "Z":
-                    if ( sea.getPing().getPosition().getOrdonnee() + sea.getPing().getSize() + posY < sea.getHeight() )
-                    {
-                        sea.getPing().deplacerOrdonnee(posY) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveForward(sea, posY) ;
                     run = true ;
                     break ;
                 case "z":
-                    if ( sea.getPing().getPosition().getOrdonnee() + sea.getPing().getSize() + posY < sea.getHeight() )
-                    {
-                        sea.getPing().deplacerOrdonnee(posY) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveForward(sea, posY) ;
                     run = true ;
                     break ;
 
+                // DEMANDER AU PINGOUIN D'ALLER A GAUCHE
                 case "Q":
-                    if ( sea.getPing().getPosition().getAbscisse() - sea.getPing().getSize() - posX > 0 )
-                    {
-                        sea.getPing().deplacerAbscisse(-posX) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveLeft(sea, posX) ;
                     run = true ;
                     break ;
                 case "q":
-                    if ( sea.getPing().getPosition().getAbscisse() - sea.getPing().getSize() - posX > 0 )
-                    {
-                        sea.getPing().deplacerAbscisse(-posX) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveLeft(sea, posX) ;
                     run = true ;
                     break ;
 
+                // FAIRE RECULER LE PINGOUIN
                 case "S":
-                    if ( sea.getPing().getPosition().getOrdonnee() > 0 )
-                    {
-                        sea.getPing().deplacerOrdonnee(-posY) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveBackward(sea, posY) ;
                     run = true ;
                     break ;
                 case "s":
-                    if ( sea.getPing().getPosition().getOrdonnee() > 0 )
-                    {
-                        sea.getPing().deplacerOrdonnee(-posY) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveBackward(sea, posY) ;
                     run = true ;
                     break ;
 
+                // DEMANDER AU PINGOUIN D'ALLER A DROITE
                 case "D":
-                    if ( sea.getPing().getPosition().getAbscisse() < sea.getWidth() )
-                    {
-                        sea.getPing().deplacerAbscisse(posX) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveRight(sea, posX) ;
                     run = true ;
                     break ;
                 case "d":
-                    if ( sea.getPing().getPosition().getAbscisse() < sea.getWidth() )
-                    {
-                        sea.getPing().deplacerAbscisse(posX) ;
-                    }
-                    else
-                    {
-                        System.out.println("Votre pingouin se tape contre le bord de l'océan !\n") ;
-                    }
+                    game.moveRight(sea, posX) ;
                     run = true ;
                     break ;
 
                 default:
                     break ;
+            }
+            if (run)
+            {
+                sea.moveFish() ;
             }
             image.setColors(sea.getColors()) ;
         }
