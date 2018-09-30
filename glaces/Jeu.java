@@ -68,20 +68,20 @@ public class Jeu
         String choix ;
         boolean run = true ;
 
+        // Facteurs de déplacement
         final double posX = 11. ;
         final double posY = 19. ;
 
-        System.out.println("---------------------") ;
-        System.out.println("     JEU PINGOUIN    ") ;
-        System.out.println("---------------------") ;
+        // Ce compteur permet de savoir quand il faut faire fondre les icebergs
+        int nbTour = 0 ;
+        final int fondreSeuil = 5 ;
+        final double fondreQuotient = 1./10. ;
+
+        printRules() ;
 
         while (run)
         {
-            System.out.println("------------------------------------") ;
-            System.out.println("Pressez Z / z pour avancer") ;
-            System.out.println("Pressez Q / q pour aller a gauche") ;
-            System.out.println("Pressez S / s pour reculer") ;
-            System.out.println("Pressez D / d pour aller a droite\n") ;
+            printControls() ;
 
             choix = scan.nextLine() ;
             run = false ;
@@ -131,11 +131,40 @@ public class Jeu
                 default:
                     break ;
             }
-            if (run)
-            {
-                sea.moveFish() ;
-            }
+
+            // On incrémante le compteur de tours
+            nbTour += 1 ;
+            System.out.println(nbTour) ;
+
+            // On délace les poissons après un déplacement
+            sea.moveFish() ;
+
+            // On réactualise le tableau de l'océan et donc l'image à l'écran
             image.setColors(sea.getColors()) ;
+
+            // Pour faire fondre les icebergs de l'océan, on attend d'avoir joué 5 tours
+            if ( nbTour % fondreSeuil == 0 ) // fondreSeuil = 5
+            {
+                sea.fondre(fondreQuotient) ;
+            }
+
+            // On vérifie si le pingouin n'est pas mort
+            if ( !sea.getPing().isAlive() )
+            {
+                run = false ;
+                System.out.println("**********************************************") ;
+                System.out.println("GAME OVER ! VOTRE PINGOUIN EST MORT DE FAIM !") ;
+                System.out.println("Rejouer ? O/N") ;
+                choix = scan.nextLine() ;
+                System.out.println("**********************************************\n") ;
+
+                if ( choix.equals("O") || choix.equals("o") )
+                {
+                    run = true ;
+                    sea = new Ocean(4,500,500) ;
+                    image.setColors(sea.getColors()) ;
+                }
+            }
         }
 
         image.fermer() ;
@@ -146,5 +175,30 @@ public class Jeu
     {
         Jeu myGame = new Jeu() ;
         myGame.jouer() ;
+    }
+
+    // Méthode d'affichage de texte
+    public static void printRules()
+    {
+        System.out.println("----------------------") ;
+        System.out.println("     JEU PINGOUIN    ") ;
+        System.out.println("----------------------\n") ;
+
+        System.out.println("********************************************") ;
+        System.out.println(" Règles : Vous contrôlez un pingouin qui") ;
+        System.out.println(" se déplace sur un océan d'icebergs et") ;
+        System.out.println(" de poissons. Vous devez manger tous les") ;
+        System.out.println(" poissons avant que votre pingouin meurt") ;
+        System.out.println(" de faim ou que les icebergs fondent tous.") ;
+        System.out.println("********************************************\n") ;
+    }
+
+    public static void printControls()
+    {
+        System.out.println("------------------------------------") ;
+        System.out.println("Pressez Z / z pour avancer") ;
+        System.out.println("Pressez Q / q pour aller a gauche") ;
+        System.out.println("Pressez S / s pour reculer") ;
+        System.out.println("Pressez D / d pour aller a droite\n") ;
     }
 }

@@ -9,8 +9,10 @@ public class Poisson
 	private int largeur ;
 	private String movement ;
 
-	// On impose un seuil de déplacement auquel au delà de ce dernier, le poisson est considéré comme fatigué
-	final private int threshold = 10 ;
+	// On genère un seuil de déplacement auquel au delà de ce dernier, le poisson est considéré comme fatigué / mort
+	Random g = new Random() ;
+	final private int thresholdTired = 40 + g.nextInt(21) ;
+	final private int thresholdDeath = 80 + g.nextInt(21) ;
 
 	// Ces champs indiqueront la jauge de fin du poisson (sa couleur dépend du nombre de mouvement)
 	// Couleur : [4 : normal] [5 : fatigué]
@@ -105,6 +107,7 @@ public class Poisson
 		}
 		this.nbMovement += 1 ;
 		this.isTired() ;
+		this.isDead() ;
 	}
 
 	public boolean isAlive()
@@ -124,9 +127,17 @@ public class Poisson
 
 	private void isTired()
 	{
-		if (this.nbMovement == this.threshold)
+		if (this.nbMovement == this.thresholdTired)
 		{
 			this.color = 5 ;
+		}
+	}
+
+	private void isDead()
+	{
+		if (this.nbMovement == this.thresholdDeath)
+		{
+			this.alive = false ;
 		}
 	}
 

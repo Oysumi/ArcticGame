@@ -47,7 +47,7 @@ public class Ocean
 
 		Random g = new Random() ;
 
-		this.nbFish = g.nextInt( (largeur+hauteur)/50 ) ;
+		this.nbFish = 20 + g.nextInt( (largeur+hauteur)/50 ) ; // on rajoute 20 au cas où le générateur retourne 0
 		this.fish = new Poisson[this.nbFish] ; // valeur arbitraire
 
 		for ( int i = 0 ; i < nbreIceberg ; i++ )
@@ -211,10 +211,6 @@ public class Ocean
 					ordFish++ ;
 					absFish = (int)p.getPos().getAbscisse() ;
 				}
-			}
-			else
-			{
-				System.out.println("mort") ;
 			}
 		}
 

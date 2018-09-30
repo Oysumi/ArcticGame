@@ -7,7 +7,7 @@ public class Pingouin
     private int size ;
 
     // On impose un seuil de fatigue
-    final private int thresholdHungry = 20 ;
+    final private int thresholdHungry = 30 ;
     final private int thresholdDeath = 50 ;
 
     // Ce champ permettra d'indiquer la jauge de faim en fonction du nombre de déplacement 
@@ -46,6 +46,8 @@ public class Pingouin
     {
         this.position.deplacer(x, 0.) ;
         this.nbMovement += 1 ;
+        this.isTired() ;
+        this.isDead() ;
     }
     
     public void deplacerOrdonnee(double y)
@@ -53,6 +55,7 @@ public class Pingouin
         this.position.deplacer(0., y) ;
         this.nbMovement += 1 ;
         this.isTired() ;
+        this.isDead() ;
     }
     
     public Point getPosition()
@@ -80,10 +83,20 @@ public class Pingouin
         if (this.nbMovement >= this.thresholdHungry)
         {
             this.color = 3 ;
+            System.out.println("[!] ATTENTION : VOTRE PINGOUIN SE FATIGUE [!]") ;
         }
         else
         {
             this.color = 2 ;
+        }
+    }
+
+    private void isDead()
+    {
+        if (this.nbMovement == this.thresholdDeath)
+        {
+            this.color = 7 ;
+            this.alive = false ;
         }
     }
 
@@ -92,4 +105,8 @@ public class Pingouin
         this.nbMovement = 0 ;
     }
 
+    public int howManyMovements()
+    {
+        return this.nbMovement ;
+    }
 }
