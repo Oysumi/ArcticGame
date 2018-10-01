@@ -134,7 +134,6 @@ public class Jeu
 
             // On incrémante le compteur de tours
             nbTour += 1 ;
-            System.out.println(nbTour) ;
 
             // On délace les poissons après un déplacement
             sea.moveFish() ;

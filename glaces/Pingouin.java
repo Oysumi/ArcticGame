@@ -22,7 +22,7 @@ public class Pingouin
     public Pingouin()
     {
         this.position = new Point(0.,0.) ;
-        this.setSize(0) ;
+        this.size = 0 ;
         this.nbMovement = 0 ;
         this.alive = true ;
         this.color = 2 ;
@@ -31,17 +31,15 @@ public class Pingouin
     public Pingouin(Point pos, int size)
     {
         this.position = new Point(pos) ;
-        this.setSize(size) ;
+        this.size = 0 ;
         this.nbMovement = 0 ;
         this.alive = true ;
         this.color = 2 ;
     }
     
-    private void setSize(int size)
-    {
-        this.size = size ;
-    }
-    
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+
     public void deplacerAbscisse(double x)
     {
         this.position.deplacer(x, 0.) ;
@@ -58,6 +56,9 @@ public class Pingouin
         this.isDead() ;
     }
     
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+
     public Point getPosition()
     {
         return this.position ;
@@ -68,15 +69,24 @@ public class Pingouin
         return this.size ;
     }
     
-    public boolean isAlive()
-    {
-        return this.alive ;
-    }
 
     public int getItsColor()
     {
         return this.color ;
     }
+
+    public boolean isAlive()
+    {
+        return this.alive ;
+    }
+
+    public int howManyMovements()
+    {
+        return this.nbMovement ;
+    }
+
+    /*********************************************************************************************/
+    /*********************************************************************************************/
 
     private void isTired()
     {
@@ -100,13 +110,13 @@ public class Pingouin
         }
     }
 
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+    
     public void ateFish()
     {
         this.nbMovement = 0 ;
     }
 
-    public int howManyMovements()
-    {
-        return this.nbMovement ;
-    }
+    
 }
