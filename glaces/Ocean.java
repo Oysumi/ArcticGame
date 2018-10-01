@@ -138,8 +138,8 @@ public class Ocean
 				p.outOfSea(this) ;
 
 				// On s'occupe maintenant de l'affichage
-				int absFish = (int)p.getPos().getAbscisse() ;
-				int ordFish = (int)p.getPos().getOrdonnee() ;
+				int absFish = (int)p.getAbscisse() ;
+				int ordFish = (int)p.getOrdonnee() ;
 				int maxAbs = absFish + p.getWidth() ;
 				int maxOrd = ordFish + p.getHeight() ;
 
@@ -151,13 +151,15 @@ public class Ocean
 						absFish++ ;
 					}
 					ordFish++ ;
-					absFish = (int)p.getPos().getAbscisse() ;
+					absFish = (int)p.getAbscisse() ;
 				}
 			}
 		}
 
 		for ( Iceberg2D i : this.ice )
 		{
+			this.ping.jumpOnIceberg(i) ;
+			
 			int basAbs = (int)i.coinEnBasAGauche().getAbscisse() ;
 			int basOrd = (int)i.coinEnBasAGauche().getOrdonnee() ;
 			int hautAbs = (int)i.coinEnHautADroite().getAbscisse() ;
@@ -176,8 +178,8 @@ public class Ocean
 		}
 
 		// On dessine maintenant le pingouin 
-		int absPing = (int)this.ping.getPosition().getAbscisse() ;
-		int ordPing = (int)this.ping.getPosition().getOrdonnee() ;
+		int absPing = (int)this.ping.getAbscisse() ;
+		int ordPing = (int)this.ping.getOrdonnee() ;
 		int sizePing = this.ping.getSize() ;
 		int absMax = absPing - sizePing ;
 		int ordMax = ordPing + sizePing ;
@@ -187,9 +189,10 @@ public class Ocean
 			while ( absPing > absMax )
 			{
 				colors[absPing][ordPing] = ping.getItsColor() ;
+				absPing-- ;
 			}
 			ordPing++ ;
-			absPing = (int)this.ping.getPosition().getAbscisse() - 1 ; // Même raison
+			absPing = (int)this.ping.getAbscisse() - 1 ; // Même raison
 		}
 
 		return colors ;
@@ -208,11 +211,14 @@ public class Ocean
 			for ( Iceberg2D i : this.ice )
 			{
 				// On vérifie d'abord avant le déplacement si on percute un iceberg (donc on anticipe un tour)
-				p.collidesIceberg(i) ;
-
-				// Après changement de direction si nécessaire, on effectue le déplacement
-				p.deplacement() ;
+				if ( p.collidesIceberg(i) )
+				{
+					p.changeDirection() ;
+				}
 			}
+
+			// Après changement de direction si nécessaire, on effectue le déplacement
+			p.deplacement() ;
 		}
 	}
 

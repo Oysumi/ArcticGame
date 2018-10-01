@@ -7,10 +7,13 @@ public class Jeu
     public Jeu()
     { } 
     
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+
     // METHODES DE DEPLACEMENT
     public void moveForward(Ocean sea, double posY)
     {
-        if ( sea.getPing().getPosition().getOrdonnee() + sea.getPing().getSize() + posY < sea.getHeight() )
+        if ( sea.getPing().getOrdonnee() + sea.getPing().getSize() + posY < sea.getHeight() )
         {
             sea.getPing().deplacerOrdonnee(posY) ;
         }
@@ -22,7 +25,7 @@ public class Jeu
 
     public void moveBackward(Ocean sea, double posY)
     {
-        if ( sea.getPing().getPosition().getOrdonnee() > 0 )
+        if ( sea.getPing().getOrdonnee() > 0 )
         {
             sea.getPing().deplacerOrdonnee(-posY) ;
         }
@@ -34,7 +37,7 @@ public class Jeu
 
     public void moveRight(Ocean sea, double posX)
     {
-        if ( sea.getPing().getPosition().getAbscisse() < sea.getWidth() )
+        if ( sea.getPing().getAbscisse() < sea.getWidth() )
         {
             sea.getPing().deplacerAbscisse(posX) ;
         }
@@ -46,7 +49,7 @@ public class Jeu
 
     public void moveLeft(Ocean sea, double posX)
     {
-        if ( sea.getPing().getPosition().getAbscisse() - sea.getPing().getSize() - posX > 0 )
+        if ( sea.getPing().getAbscisse() - sea.getPing().getSize() - posX > 0 )
         {
             sea.getPing().deplacerAbscisse(-posX) ;
         }
@@ -56,6 +59,37 @@ public class Jeu
         }
     }
 
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+
+    // Méthode d'affichage de texte
+    public void printRules()
+    {
+        System.out.println("----------------------") ;
+        System.out.println("     JEU PINGOUIN    ") ;
+        System.out.println("----------------------\n") ;
+
+        System.out.println("********************************************") ;
+        System.out.println(" Règles : Vous contrôlez un pingouin qui") ;
+        System.out.println(" se déplace sur un océan d'icebergs et") ;
+        System.out.println(" de poissons. Vous devez manger tous les") ;
+        System.out.println(" poissons avant que votre pingouin meurt") ;
+        System.out.println(" de faim ou que les icebergs fondent tous.") ;
+        System.out.println("********************************************\n") ;
+    }
+
+    public void printControls()
+    {
+        System.out.println("------------------------------------") ;
+        System.out.println("Pressez Z / z pour avancer") ;
+        System.out.println("Pressez Q / q pour aller a gauche") ;
+        System.out.println("Pressez S / s pour reculer") ;
+        System.out.println("Pressez D / d pour aller a droite\n") ;
+    }
+
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+    
     // METHODE DE JEU
     public void jouer()
     {
@@ -82,6 +116,8 @@ public class Jeu
         while (run)
         {
             printControls() ;
+
+            System.out.println("tour numéro " + nbTour) ;
 
             choix = scan.nextLine() ;
             run = false ;
@@ -170,34 +206,12 @@ public class Jeu
         
     }
     
+    /*********************************************************************************************/
+    /*********************************************************************************************/
+
     public static void main(String[] args)
     {
         Jeu myGame = new Jeu() ;
         myGame.jouer() ;
-    }
-
-    // Méthode d'affichage de texte
-    public static void printRules()
-    {
-        System.out.println("----------------------") ;
-        System.out.println("     JEU PINGOUIN    ") ;
-        System.out.println("----------------------\n") ;
-
-        System.out.println("********************************************") ;
-        System.out.println(" Règles : Vous contrôlez un pingouin qui") ;
-        System.out.println(" se déplace sur un océan d'icebergs et") ;
-        System.out.println(" de poissons. Vous devez manger tous les") ;
-        System.out.println(" poissons avant que votre pingouin meurt") ;
-        System.out.println(" de faim ou que les icebergs fondent tous.") ;
-        System.out.println("********************************************\n") ;
-    }
-
-    public static void printControls()
-    {
-        System.out.println("------------------------------------") ;
-        System.out.println("Pressez Z / z pour avancer") ;
-        System.out.println("Pressez Q / q pour aller a gauche") ;
-        System.out.println("Pressez S / s pour reculer") ;
-        System.out.println("Pressez D / d pour aller a droite\n") ;
     }
 }

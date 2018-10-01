@@ -10,7 +10,7 @@ public class Poisson
 	private String movement ;
 
 	// Déplacement en abscisse ou ordonnée commun à tous les poissons
-	private static double moveXOrY = 4. ;
+	private static double moveXOrY = 2. ;
 
 	// On genère un seuil de déplacement auquel au delà de ce dernier, le poisson est considéré comme fatigué / mort
 	private Random g = new Random() ;
@@ -70,9 +70,14 @@ public class Poisson
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
-	public Point getPos()
+	public double getAbscisse()
 	{
-		return this.position ;
+		return this.position.getAbscisse() ;
+	}
+
+	public double getOrdonnee()
+	{
+		return this.position.getOrdonnee() ;
 	}
 
 	public int getWidth()
@@ -157,16 +162,16 @@ public class Poisson
 		// ainsi on se ramène en quelque sorte à la méthode collision d'un iceberg avec le point en bas à gauche et en haut à droite
 		
 		// On test si le point bas gauche du poisson est inférieur en abscisse au coint haut droit de l'iceberg
-    	boolean bas_gauche_abs = (this.position.getAbscisse() + this.largeur <= ice.coinEnHautADroite().getAbscisse()) ;
+    	boolean bas_gauche_abs = (this.getAbscisse() + this.largeur <= ice.coinEnHautADroite().getAbscisse()) ;
 
     	// On test si le point bas gauche du poisson est inférieur en ordonné au coint haut droit de l'iceberg
-    	boolean bas_gauche_ord = (this.position.getOrdonnee() + this.hauteur <= ice.coinEnHautADroite().getOrdonnee()) ;
+    	boolean bas_gauche_ord = (this.getOrdonnee() + this.hauteur <= ice.coinEnHautADroite().getOrdonnee()) ;
 
     	// On test si le point droit haut du poisson est supérieur en ordonnée au coin bas gauche de l'iceberg
-    	boolean haut_droit_ord = (this.position.getOrdonnee() + 2 * this.hauteur >= ice.coinEnBasAGauche().getOrdonnee()) ;
+    	boolean haut_droit_ord = (this.getOrdonnee() + 2 * this.hauteur >= ice.coinEnBasAGauche().getOrdonnee()) ;
 
     	// On test si le point droit haut du poisson est supérieur en abscisse au coin bas gauche de l'iceberg
-    	boolean haut_droit_abs = (this.position.getAbscisse() + 2 * this.largeur >= ice.coinEnBasAGauche().getAbscisse()) ;
+    	boolean haut_droit_abs = (this.getAbscisse() + 2 * this.largeur >= ice.coinEnBasAGauche().getAbscisse()) ;
 
     	return ( bas_gauche_abs && bas_gauche_ord && haut_droit_ord && haut_droit_abs ) ;
 	}
@@ -190,20 +195,20 @@ public class Poisson
 	{
 		// On vérifie si il n'y a pas de problèmes quand on va accéder aux cases du tableau
 		// Dans le cas où l'on a un depassement, on ramène le poisson en absicsse/ordonné 0
-		boolean depassAbsPos = ( this.position.getAbscisse() + this.largeur >= sea.getWidth() ) ;
+		boolean depassAbsPos = ( this.getAbscisse() + this.largeur >= sea.getWidth() ) ;
 
 		// Ici, nous n'ajoutons pas widthFish étant donné qu'on se situe à l'emplacement du point exact
 		// en effet, nous avons décidé de partir du point et de dessiner le rectangle vers la droite, en rajoutons
 		// widthFish on risque d'avoir une coordonnée négative
-		boolean depassAbsNeg = ( this.position.getAbscisse() < 0 ) ;
+		boolean depassAbsNeg = ( this.getAbscisse() < 0 ) ;
 
-		boolean depassOrdPos = ( this.position.getAbscisse() + this.hauteur >= sea.getHeight() ) ;
-		boolean depassOrdNeg = ( this.position.getOrdonnee() < 0 ) ;
+		boolean depassOrdPos = ( this.getOrdonnee() + this.hauteur >= sea.getHeight() ) ;
+		boolean depassOrdNeg = ( this.getOrdonnee() < 0 ) ;
 
 		// Si un poisson sort de l'écran par la droite, on le ramène à gauche de l'écran
 		if (depassAbsPos)
 		{
-			this.position.deplacer(-this.position.getAbscisse(), 0.) ;
+			this.position.deplacer(-this.getAbscisse(), 0.) ;
 		}
 
 		// Si un poisson sort de l'écran par la gauche, on le ramène à droite de l'écran
@@ -211,17 +216,17 @@ public class Poisson
 		// la largeur du poisson à dessiner vers la droite, - 1 à cause du tableau (éviter un dépassement mémoire)
 		if (depassAbsNeg)
 		{
-			this.position.deplacer((double)sea.getWidth() - this.position.getAbscisse() - this.largeur - 1, 0.) ;
+			this.position.deplacer((double)sea.getWidth() - this.getAbscisse() - this.largeur - 1, 0.) ;
 		}
 
 		if (depassOrdPos)
 		{
-			this.position.deplacer(0., -this.position.getOrdonnee()) ;
+			this.position.deplacer(0., -this.getOrdonnee()) ;
 		}
 
 		if (depassOrdNeg)
 		{
-			this.position.deplacer(0., (double)sea.getHeight() - this.position.getOrdonnee() - this.hauteur - 1) ;
+			this.position.deplacer(0., (double)sea.getHeight() - this.getOrdonnee() - this.hauteur - 1) ;
 		}
 	}
 
@@ -231,16 +236,16 @@ public class Poisson
 		// car nous avons décidés de partir d'un point représentant le pingouin et de dessiner le carré vers la gauche
 
 		// On test si le point bas gauche du poisson est inférieur en abscisse au coint haut droit du pingouin
-    	boolean bas_gauche_abs = (this.position.getAbscisse() <= ping.getPosition().getAbscisse()) ;
+    	boolean bas_gauche_abs = (this.getAbscisse() <= ping.getAbscisse()) ;
 
     	// On test si le point bas gauche du poisson est inférieur en ordonné au coint haut droit du pingouin
-    	boolean bas_gauche_ord = (this.position.getOrdonnee() <= ping.getPosition().getOrdonnee() + ping.getSize()) ;
+    	boolean bas_gauche_ord = (this.getOrdonnee() <= ping.getOrdonnee() + ping.getSize()) ;
 
     	// On test si le point droit haut du poisson est supérieur en ordonnée au coin bas gauche du pingouin
-    	boolean haut_droit_ord = (this.position.getOrdonnee() + this.hauteur >= ping.getPosition().getOrdonnee()) ;
+    	boolean haut_droit_ord = (this.getOrdonnee() + this.hauteur >= ping.getOrdonnee()) ;
 
     	// On test si le point droit haut du poisson est supérieur en abscisse au coin bas gauche du pingouin
-    	boolean haut_droit_abs = (this.position.getAbscisse() + this.largeur >= ping.getPosition().getAbscisse() - ping.getSize()) ;
+    	boolean haut_droit_abs = (this.getAbscisse() + this.largeur >= ping.getAbscisse() - ping.getSize()) ;
 
     	if ( bas_gauche_abs && bas_gauche_ord && haut_droit_ord && haut_droit_abs )
     	{
