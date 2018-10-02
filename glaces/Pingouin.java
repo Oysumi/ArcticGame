@@ -124,31 +124,31 @@ public class Pingouin
     {
         double facteurDeCasse = 1./10. ;
 
-        double[] tabPos = {ice.coinEnBasAGauche().getAbscisse() , ice.coinEnBasAGauche().getOrdonnee() ,      // 0 - 1
-                           ice.coinEnHautADroite().getAbscisse() , ice.coinEnHautADroite().getOrdonnee() ,    // 2 - 3
-                           this.getAbscisse() - (double)this.getSize() , this.getOrdonnee() ,                 // 4 - 5
-                           this.getAbscisse() , this.getOrdonnee() + (double)this.getSize()               } ; // 6 - 7
-
-        // Ces booléens vont être utiles pour déterminer quelle partie de l'iceberg casser
-        boolean gaucheAbs ;
-        boolean hautGaucheOrd ;
-        boolean basGaucheOrd ;
-
-        boolean droiteAbs ;
-        boolean hautDroiteOrd ;
-        boolean basDroiteOrd ;
-
-        // On test si le pingouin monte sur l'iceberg par le bas
-        hautGaucheOrd = ( tabPos[7] > tabPos[1] ) ; // le test pour le coin droit est le même
-        basGaucheOrd = ( tabPos[5] < tabPos[1] ) ;
-        gaucheAbs = ( tabPos[4] > tabPos[0] ) ;
-        droiteAbs = ( tabPos[4] < tabPos[2] ) ;
-
-        if ( hautGaucheOrd && basGaucheOrd && gaucheAbs && droiteAbs )
+        if ( this.checkBottom(ice) )
         {
             ice.casserBas(facteurDeCasse) ;
-            System.out.println("CASSER BAS") ;
         }
+    }
+
+    private boolean checkBottom(Iceberg2D ice)
+    {
+        boolean basGaucheAbs ;
+        boolean basDroitAbs ;
+
+        boolean basGaucheOrd ;
+        boolean hautDroitOrd ;
+
+        double pingGaucheAbs = this.getAbscisse() - (double)this.getSize() ;
+        double pingDroitAbs = this.getAbscisse() ;
+        double pingOrdBas = this.getOrdonnee() ;
+        double pingOrdHaut = pingOrdBas + (double)this.getSize() ;
+
+        basGaucheAbs = ( pingGaucheAbs > ice.coinEnBasAGauche().getAbscisse() ) ;
+        basDroitAbs = ( pingDroitAbs < ice.coinEnHautADroite().getAbscisse() ) ;
+        basGaucheOrd = ( pingOrdBas < ice.coinEnBasAGauche().getOrdonnee() ) ;
+        hautDroitOrd = ( pingOrdHaut > ice.coinEnBasAGauche().getOrdonnee() ) ;
+
+        return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
     }
     
 }

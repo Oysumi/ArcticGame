@@ -108,7 +108,7 @@ public class Jeu
 
         // Ce compteur permet de savoir quand il faut faire fondre les icebergs
         int nbTour = 0 ;
-        final int fondreSeuil = 5 ;
+        final int fondreSeuil = 10 ;
         final double fondreQuotient = 1./10. ;
 
         printRules() ;
