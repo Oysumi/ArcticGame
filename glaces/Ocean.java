@@ -24,7 +24,7 @@ public class Ocean
 		this.nbreIceberg = 2 ;
 
 		// On veut que notre pingouin se situe en bas à droite de l'écran
-		this.ping = new Pingouin(new Point(this.largeur - 1.,0.), 20) ; // on retire 1 pour éviter un dépassement mémoire lors du dessin
+		this.ping = new Pingouin(new Point(this.largeur - 1.,0.), 5) ; // on retire 1 pour éviter un dépassement mémoire lors du dessin
 
 		// On va générer des poissons
 		this.fish = new Poisson[20] ;
@@ -34,7 +34,7 @@ public class Ocean
 		{
 			int posX = this.g.nextInt(250) ;
 			int posY = this.g.nextInt(250) ;
-			this.fish[i] = new Poisson(new Point(posX, posY), 10, 5) ;
+			this.fish[i] = new Poisson(new Point(posX, posY), 10, 10) ;
 		}
 	}
 
@@ -44,7 +44,7 @@ public class Ocean
 		this.hauteur = hauteur ;
 		this.ice = new Iceberg2D[nbreIceberg] ;
 
-		this.nbFish = 20 + this.g.nextInt( (largeur+hauteur)/50 ) ; // on rajoute 20 au cas où le générateur retourne 0
+		this.nbFish = 30 + this.g.nextInt( (largeur+hauteur)/50 ) ; // on rajoute 30 au cas où le générateur retourne 0
 		this.fish = new Poisson[this.nbFish] ; // valeur arbitraire
 
 		for ( int i = 0 ; i < nbreIceberg ; i++ )
@@ -69,7 +69,7 @@ public class Ocean
 		}
 
 		// On veut que le pingouin se situe en bas à droite de l'écran, mais on retire 1 pour faciliter le dessin
-		this.ping = new Pingouin(new Point((double)largeur - 1., 0.), 20) ;
+		this.ping = new Pingouin(new Point((double)largeur - 1., 0.), 10) ;
 	}
 
 	/*********************************************************************************************/

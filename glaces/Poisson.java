@@ -14,8 +14,8 @@ public class Poisson
 
 	// On genère un seuil de déplacement auquel au delà de ce dernier, le poisson est considéré comme fatigué / mort
 	private Random g = new Random() ;
-	final private int thresholdTired = 50 + g.nextInt(21) ;
-	final private int thresholdDeath = 100 + g.nextInt(21) ;
+	final private int thresholdTired = 90 + g.nextInt(21) ;
+	final private int thresholdDeath = 180 + g.nextInt(21) ;
 
 	// Ces champs indiqueront la jauge de fin du poisson (sa couleur dépend du nombre de mouvement)
 	// Couleur : [4 : normal] [5 : fatigué]
@@ -40,8 +40,6 @@ public class Poisson
 	public Poisson(Point pos, int height, int width)
 	{
 		this.position = new Point(pos) ;
-		this.hauteur = height ;
-		this.largeur = width ;
 		this.nbMovement = 0 ;
 		this.color = 4 ;
 		this.alive = true ;
@@ -50,17 +48,33 @@ public class Poisson
 		int alea = this.g.nextInt(4) ;
 		switch (alea)
 		{
+			/* Petit plus, si un poisson bouge horizontalement, on le représente "couché" et réciproquement
+			 * s'il se déplace verticalement, on le représente debout. Ainsi, selon son sens de déplacement
+			 * et partant du fait qu'on appelle ce constructeur avec height > width, on inverse quand nécessaire */
+
 			case 0:
 				this.movement = "pa" ; // déplacement positif en abscisse
+
+				// On inverse hauteur et largeur pour donner une cohérence dans la forme du poisson par rapport à son déplacement
+				this.hauteur = width ;
+				this.largeur = height ;
 				break ;
 			case 1:
 				this.movement = "na" ; // déplacement négatif en abscisse
+
+				// On inverse hauteur et largeur pour donner une cohérence dans la forme du poisson par rapport à son déplacement
+				this.hauteur = width ;
+				this.largeur = height ;
 				break ;
 			case 2:
 				this.movement = "po" ; // déplacement positif en ordonnée
+				this.hauteur = height ;
+				this.largeur = width ;
 				break ;
 			case 3:
 				this.movement = "no" ; // déplacement négatif en ordonnée
+				this.hauteur = height ;
+				this.largeur = width ;
 				break ;
 			default:
 				break ;
@@ -187,10 +201,15 @@ public class Poisson
 			this.movement = (alea % 2 == 0) ? "pa" : "na" ;
 		}
 
-		if ( this.movement == "pa" || this.movement == "na" )
+		else if ( this.movement == "pa" || this.movement == "na" )
 		{
 			this.movement = (alea % 2 == 0) ? "po" : "no" ;
 		}
+
+		// On oublie pas d'inverser la largeur et la hauteur pour la représentation du sens de déplacement
+		int temp = this.largeur ;
+		this.largeur = this.hauteur ;
+		this.hauteur = temp ;
 	}
 
 	public void outOfSea(Ocean sea)
@@ -234,25 +253,29 @@ public class Poisson
 
 	public void getEaten(Pingouin ping)
 	{
-		// Même principe que la collision avec un iceberg, seul les valeurs dans les tests changent
-		// car nous avons décidés de partir d'un point représentant le pingouin et de dessiner le carré vers la gauche
+		// On test si le poisson est encore vivant, car une fois mort il est toujours présent dans l'océan mais n'est juste
+		// plus affiché, il est probable qu'un poisson mort rentre en collision avec le pingouin même s'il n'est plus affiché
+		if (this.alive)
+		{	// Même principe que la collision avec un iceberg, seul les valeurs dans les tests changent
+			// car nous avons décidés de partir d'un point représentant le pingouin et de dessiner le carré vers la gauche
 
-		// On test si le point bas gauche du poisson est inférieur en abscisse au coint haut droit du pingouin
-    	boolean bas_gauche_abs = (this.getAbscisse() <= ping.getAbscisse()) ;
+			// On test si le point bas gauche du poisson est inférieur en abscisse au coint haut droit du pingouin
+    		boolean bas_gauche_abs = (this.getAbscisse() <= ping.getAbscisse()) ;
 
-    	// On test si le point bas gauche du poisson est inférieur en ordonné au coint haut droit du pingouin
-    	boolean bas_gauche_ord = (this.getOrdonnee() <= ping.getOrdonnee() + ping.getSize()) ;
+    		// On test si le point bas gauche du poisson est inférieur en ordonné au coint haut droit du pingouin
+    		boolean bas_gauche_ord = (this.getOrdonnee() <= ping.getOrdonnee() + ping.getSize()) ;
 
-    	// On test si le point droit haut du poisson est supérieur en ordonnée au coin bas gauche du pingouin
-    	boolean haut_droit_ord = (this.getOrdonnee() + this.hauteur >= ping.getOrdonnee()) ;
+    		// On test si le point droit haut du poisson est supérieur en ordonnée au coin bas gauche du pingouin
+    		boolean haut_droit_ord = (this.getOrdonnee() + this.hauteur >= ping.getOrdonnee()) ;
 
-    	// On test si le point droit haut du poisson est supérieur en abscisse au coin bas gauche du pingouin
-    	boolean haut_droit_abs = (this.getAbscisse() + this.largeur >= ping.getAbscisse() - ping.getSize()) ;
+    		// On test si le point droit haut du poisson est supérieur en abscisse au coin bas gauche du pingouin
+    		boolean haut_droit_abs = (this.getAbscisse() + this.largeur >= ping.getAbscisse() - ping.getSize()) ;
 
-    	if ( bas_gauche_abs && bas_gauche_ord && haut_droit_ord && haut_droit_abs )
-    	{
-    		this.alive = false ;
-    		ping.ateFish() ;
+    		if ( bas_gauche_abs && bas_gauche_ord && haut_droit_ord && haut_droit_abs )
+    		{
+    			this.alive = false ;
+    			ping.ateFish() ;
+    		}
     	}
 	}
 }

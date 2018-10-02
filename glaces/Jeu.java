@@ -11,11 +11,11 @@ public class Jeu
     /*********************************************************************************************/
 
     // METHODES DE DEPLACEMENT
-    public void moveForward(Ocean sea, double posY)
+    public void moveForward(Ocean sea)
     {
-        if ( sea.getPing().getOrdonnee() + sea.getPing().getSize() + posY < sea.getHeight() )
+        if ( sea.getPing().getOrdonnee() + sea.getPing().getSize() + sea.getPing().getSpeed() < sea.getHeight() )
         {
-            sea.getPing().deplacerOrdonnee(posY) ;
+            sea.getPing().deplacerOrdonnee(sea.getPing().getSpeed()) ;
         }
         else
         {
@@ -23,11 +23,11 @@ public class Jeu
         }
     }
 
-    public void moveBackward(Ocean sea, double posY)
+    public void moveBackward(Ocean sea)
     {
         if ( sea.getPing().getOrdonnee() > 0 )
         {
-            sea.getPing().deplacerOrdonnee(-posY) ;
+            sea.getPing().deplacerOrdonnee(-sea.getPing().getSpeed()) ;
         }
         else
         {
@@ -35,11 +35,11 @@ public class Jeu
         }
     }
 
-    public void moveRight(Ocean sea, double posX)
+    public void moveRight(Ocean sea)
     {
         if ( sea.getPing().getAbscisse() < sea.getWidth() )
         {
-            sea.getPing().deplacerAbscisse(posX) ;
+            sea.getPing().deplacerAbscisse(sea.getPing().getSpeed()) ;
         }
         else
         {
@@ -47,11 +47,11 @@ public class Jeu
         }
     }
 
-    public void moveLeft(Ocean sea, double posX)
+    public void moveLeft(Ocean sea)
     {
-        if ( sea.getPing().getAbscisse() - sea.getPing().getSize() - posX > 0 )
+        if ( sea.getPing().getAbscisse() - sea.getPing().getSize() - sea.getPing().getSpeed() > 0 )
         {
-            sea.getPing().deplacerAbscisse(-posX) ;
+            sea.getPing().deplacerAbscisse(-sea.getPing().getSpeed()) ;
         }
         else
         {
@@ -63,33 +63,33 @@ public class Jeu
     /*********************************************************************************************/
 
     // Méthode d'affichage de texte
-    public void printRules()
+    private void printRules()
     {
         System.out.println("----------------------") ;
         System.out.println("     JEU PINGOUIN    ") ;
         System.out.println("----------------------\n") ;
 
-        System.out.println("***********************************************************") ;
-        System.out.println(" Règles : Vous contrôlez un pingouin qui se déplace sur un") ;
-        System.out.println(" océan d'icebergs et de poissons. Vous devez manger tous") ;
-        System.out.println(" les poissons avant que votre pingouin ne meurt de faim.") ;
-        System.out.println(" Sachez que les poissons changent de direction quand ils") ;
-        System.out.println(" rencontrent un iceberg. Ainsi, plus il y a d'icebergs,") ;
-        System.out.println(" plus il est facile de manger. Toutefois, ces derniers") ;
-        System.out.println(" fondent à mesure du temps et certains poissons sont") ;
-        System.out.println(" cachés en dessous par peur de votre terrifiant pingouin !") ;
-        System.out.println(" Les poissons finissent par s'épuiser et mourir au bout") ;
-        System.out.println(" d'un certains nombre de tour.") ;
-        System.out.println("***********************************************************\n") ;
+        System.out.println("********************************************************************************") ;
+        System.out.println(" Règles : Vous contrôlez un pingouin qui se déplace sur un océan d'icebergs") ;
+        System.out.println(" et de poissons. Vous devez manger tous les poissons avant que votre pingouin") ;
+        System.out.println(" ne meurt de faim. Sachez que les poissons changent de direction quand ils") ;
+        System.out.println(" rencontrent un iceberg. Ainsi, plus il y a d'icebergs, plus il est facile") ;
+        System.out.println(" de les manger. Toutefois, ces icebergs fondent à mesure du temps et cassent") ;
+        System.out.println(" si vous montez dessus. Certains poissons se sont cachés en dessous par peur") ;
+        System.out.println(" de votre terrifiant pingouin ! Ces derniers finissent par s'épuiser et par") ;
+        System.out.println(" mourir au bout d'un certain nombre de tour. Plus vous mangez, plus vous") ;
+        System.out.println(" grossissez, et plus vous êtes lent ! BON JEU !\n") ;
+        System.out.println("********************************************************************************\n") ;
     }
 
-    public void printControls()
+    private void printControls()
     {
         System.out.println("------------------------------------") ;
         System.out.println("Pressez Z / z pour avancer") ;
         System.out.println("Pressez Q / q pour aller a gauche") ;
         System.out.println("Pressez S / s pour reculer") ;
-        System.out.println("Pressez D / d pour aller a droite\n") ;
+        System.out.println("Pressez D / d pour aller a droite") ;
+        System.out.println("------------------------------------") ;
     }
 
     /*********************************************************************************************/
@@ -129,41 +129,41 @@ public class Jeu
             {
                 // AVANCER LE PINGOUIN
                 case "Z":
-                    game.moveForward(sea, posY) ;
+                    game.moveForward(sea) ;
                     run = true ;
                     break ;
                 case "z":
-                    game.moveForward(sea, posY) ;
+                    game.moveForward(sea) ;
                     run = true ;
                     break ;
 
                 // DEMANDER AU PINGOUIN D'ALLER A GAUCHE
                 case "Q":
-                    game.moveLeft(sea, posX) ;
+                    game.moveLeft(sea) ;
                     run = true ;
                     break ;
                 case "q":
-                    game.moveLeft(sea, posX) ;
+                    game.moveLeft(sea) ;
                     run = true ;
                     break ;
 
                 // FAIRE RECULER LE PINGOUIN
                 case "S":
-                    game.moveBackward(sea, posY) ;
+                    game.moveBackward(sea) ;
                     run = true ;
                     break ;
                 case "s":
-                    game.moveBackward(sea, posY) ;
+                    game.moveBackward(sea) ;
                     run = true ;
                     break ;
 
                 // DEMANDER AU PINGOUIN D'ALLER A DROITE
                 case "D":
-                    game.moveRight(sea, posX) ;
+                    game.moveRight(sea) ;
                     run = true ;
                     break ;
                 case "d":
-                    game.moveRight(sea, posX) ;
+                    game.moveRight(sea) ;
                     run = true ;
                     break ;
 

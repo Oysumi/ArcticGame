@@ -22,6 +22,9 @@ public class Pingouin
     // Ce champ décide si on gagné la partie, si on a mangé au moins la moitié de l'océan alors c'est dans la poche !
     private int nbFishEaten ;
 
+    // Ce champ indique de combien de pixels le pingouin se déplace en sachant qu'en grossissant, il ralentit
+    private double speed ;
+
     public Pingouin()
     {
         this.position = new Point(0.,0.) ;
@@ -30,6 +33,7 @@ public class Pingouin
         this.alive = true ;
         this.color = 2 ;
         this.nbFishEaten = 0 ;
+        this.speed = 0 ;
     }
     
     public Pingouin(Point pos, int size)
@@ -40,6 +44,7 @@ public class Pingouin
         this.alive = true ;
         this.color = 2 ;
         this.nbFishEaten = 0 ;
+        this.speed = 10 ;
     }
     
     /*********************************************************************************************/
@@ -95,6 +100,11 @@ public class Pingouin
         return this.nbMovement ;
     }
 
+    public double getSpeed()
+    {
+        return this.speed ;
+    }
+
     /*********************************************************************************************/
     /*********************************************************************************************/
 
@@ -124,6 +134,12 @@ public class Pingouin
     {
         this.nbMovement = 0 ;
         this.nbFishEaten += 1 ;
+        if ( this.nbFishEaten % 7 == 0 )
+        {
+            this.size += 5 ;
+            this.speed -= 1. ;
+        }
+        System.out.println("A MANGE") ;
     }
 
     public void jumpOnIceberg(Iceberg2D ice)
