@@ -19,6 +19,9 @@ public class Pingouin
     // Couleur : [2: normal] [3: fatigué]
     private int color ;
 
+    // Ce champ décide si on gagné la partie, si on a mangé au moins la moitié de l'océan alors c'est dans la poche !
+    private int nbFishEaten ;
+
     public Pingouin()
     {
         this.position = new Point(0.,0.) ;
@@ -26,6 +29,7 @@ public class Pingouin
         this.nbMovement = 0 ;
         this.alive = true ;
         this.color = 2 ;
+        this.nbFishEaten = 0 ;
     }
     
     public Pingouin(Point pos, int size)
@@ -35,6 +39,7 @@ public class Pingouin
         this.nbMovement = 0 ;
         this.alive = true ;
         this.color = 2 ;
+        this.nbFishEaten = 0 ;
     }
     
     /*********************************************************************************************/
@@ -118,23 +123,38 @@ public class Pingouin
     public void ateFish()
     {
         this.nbMovement = 0 ;
+        this.nbFishEaten += 1 ;
     }
 
     public void jumpOnIceberg(Iceberg2D ice)
     {
-        double facteurDeCasse = 1./10. ;
+        double facteurDeCasse = 1./4. ;
 
         if ( this.checkBottom(ice) )
-        {
             ice.casserBas(facteurDeCasse) ;
-        }
+
+        if ( this.checkRight(ice) )
+            ice.casserDroite(facteurDeCasse) ;
+
+        if ( this.checkTop(ice) )
+            ice.casserHaut(facteurDeCasse) ;
+
+        if ( this.checkLeft(ice) )
+            ice.casserGauche(facteurDeCasse) ;
     }
+
+    public boolean ateEnough(Ocean sea)
+    {
+        return ( this.nbFishEaten >= sea.getNbFish() / 2 ) ;
+    }
+    
+    /*********************************************************************************************/
+    /*********************************************************************************************/
 
     private boolean checkBottom(Iceberg2D ice)
     {
         boolean basGaucheAbs ;
         boolean basDroitAbs ;
-
         boolean basGaucheOrd ;
         boolean hautDroitOrd ;
 
@@ -143,10 +163,70 @@ public class Pingouin
         double pingOrdBas = this.getOrdonnee() ;
         double pingOrdHaut = pingOrdBas + (double)this.getSize() ;
 
-        basGaucheAbs = ( pingGaucheAbs > ice.coinEnBasAGauche().getAbscisse() ) ;
-        basDroitAbs = ( pingDroitAbs < ice.coinEnHautADroite().getAbscisse() ) ;
-        basGaucheOrd = ( pingOrdBas < ice.coinEnBasAGauche().getOrdonnee() ) ;
-        hautDroitOrd = ( pingOrdHaut > ice.coinEnBasAGauche().getOrdonnee() ) ;
+        basGaucheAbs = ( pingGaucheAbs >= ice.coinEnBasAGauche().getAbscisse() ) ;
+        basDroitAbs = ( pingDroitAbs <= ice.coinEnHautADroite().getAbscisse() ) ;
+        basGaucheOrd = ( pingOrdBas <= ice.coinEnBasAGauche().getOrdonnee() ) ;
+        hautDroitOrd = ( pingOrdHaut >= ice.coinEnBasAGauche().getOrdonnee() ) ;
+
+        return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
+    }
+
+    private boolean checkRight(Iceberg2D ice)
+    {
+        boolean basGaucheAbs ;
+        boolean basDroitAbs ;
+        boolean basGaucheOrd ;
+        boolean hautDroitOrd ;
+
+        double pingGaucheAbs = this.getAbscisse() - (double)this.getSize() ;
+        double pingDroitAbs = this.getAbscisse() ;
+        double pingOrdBas = this.getOrdonnee() ;
+        double pingOrdHaut = pingOrdBas + (double)this.getSize() ;
+
+        basGaucheAbs = ( pingGaucheAbs <= ice.coinEnHautADroite().getAbscisse() ) ;
+        basDroitAbs = ( pingDroitAbs >= ice.coinEnHautADroite().getAbscisse() ) ;
+        basGaucheOrd = ( pingOrdBas >= ice.coinEnBasAGauche().getOrdonnee() ) ;
+        hautDroitOrd = ( pingOrdHaut <= ice.coinEnHautADroite().getOrdonnee() ) ;
+
+        return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
+    }
+
+    private boolean checkTop(Iceberg2D ice)
+    {
+        boolean basGaucheAbs ;
+        boolean basDroitAbs ;
+        boolean basGaucheOrd ;
+        boolean hautDroitOrd ;
+
+        double pingGaucheAbs = this.getAbscisse() - (double)this.getSize() ;
+        double pingDroitAbs = this.getAbscisse() ;
+        double pingOrdBas = this.getOrdonnee() ;
+        double pingOrdHaut = pingOrdBas + (double)this.getSize() ;
+
+        basGaucheAbs = ( pingGaucheAbs >= ice.coinEnBasAGauche().getAbscisse() ) ;
+        basDroitAbs = ( pingDroitAbs <= ice.coinEnHautADroite().getAbscisse() ) ;
+        basGaucheOrd = ( pingOrdBas <= ice.coinEnHautADroite().getOrdonnee() ) ;
+        hautDroitOrd = ( pingOrdHaut >= ice.coinEnHautADroite().getOrdonnee() ) ;
+
+        return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
+    }
+
+    private boolean checkLeft(Iceberg2D ice)
+    {
+        boolean basGaucheAbs ;
+        boolean basDroitAbs ;
+        boolean basGaucheOrd ;
+        boolean hautDroitOrd ;
+
+        double pingGaucheAbs = this.getAbscisse() - (double)this.getSize() ;
+        double pingDroitAbs = this.getAbscisse() ;
+        double pingOrdBas = this.getOrdonnee() ;
+        double pingOrdHaut = pingOrdBas + (double)this.getSize() ;
+
+        basGaucheAbs = ( pingGaucheAbs <= ice.coinEnBasAGauche().getAbscisse() ) ;
+        basDroitAbs = ( pingDroitAbs >= ice.coinEnBasAGauche().getAbscisse() ) ;
+        basGaucheOrd = ( pingOrdBas >= ice.coinEnBasAGauche().getOrdonnee() ) ;
+        hautDroitOrd = ( pingOrdHaut <= ice.coinEnHautADroite().getOrdonnee() ) ;
 
         return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
     }

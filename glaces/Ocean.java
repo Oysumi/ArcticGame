@@ -9,8 +9,8 @@ public class Ocean
 	private Iceberg2D[] ice ;
 	private Pingouin ping ;
 	private Poisson[] fish ;
-	private int nbFish ; // servira à l'objectif du jeu
-	private int nbreIceberg ; // servira à l'objectif du jeu
+	private int nbFish ;
+	private int nbreIceberg ;
 	final private double moveFish = 4. ;
 	private Random g = new Random() ; // on lui attribue un random pour éviter la multiplication des objets morts
 
@@ -88,6 +88,17 @@ public class Ocean
 	public int getCount()
 	{
 		return this.ice.length ;
+	}
+
+	// Nous sommes obligés ici de fournir un accès au pingouin de l'océan pour le déplacer
+	public Pingouin getPing()
+	{
+		return this.ping ;
+	} 
+
+	public int getNbFish()
+	{
+		return this.nbFish ;
 	}
 
 	/*********************************************************************************************/
@@ -192,17 +203,14 @@ public class Ocean
 				absPing-- ;
 			}
 			ordPing++ ;
-			absPing = (int)this.ping.getAbscisse() - 1 ; // Même raison
+			absPing = (int)this.ping.getAbscisse() ; // Même raison
 		}
 
 		return colors ;
 	}
 
-	// Nous sommes obligés ici de fournir un accès au pingouin de l'océan pour le déplacer
-	public Pingouin getPing()
-	{
-		return this.ping ;
-	} 
+	/*********************************************************************************************/
+    /*********************************************************************************************/
 
 	public void moveFish()
 	{
@@ -220,6 +228,18 @@ public class Ocean
 			// Après changement de direction si nécessaire, on effectue le déplacement
 			p.deplacement() ;
 		}
+	}
+
+	public boolean areFishsAllDead()
+	{
+		boolean dead = false ;
+
+		for ( Poisson p : this.fish )
+		{
+			dead = dead || p.isAlive() ;
+		}
+
+		return !dead ;
 	}
 
 }

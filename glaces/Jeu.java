@@ -69,13 +69,18 @@ public class Jeu
         System.out.println("     JEU PINGOUIN    ") ;
         System.out.println("----------------------\n") ;
 
-        System.out.println("********************************************") ;
-        System.out.println(" Règles : Vous contrôlez un pingouin qui") ;
-        System.out.println(" se déplace sur un océan d'icebergs et") ;
-        System.out.println(" de poissons. Vous devez manger tous les") ;
-        System.out.println(" poissons avant que votre pingouin meurt") ;
-        System.out.println(" de faim ou que les icebergs fondent tous.") ;
-        System.out.println("********************************************\n") ;
+        System.out.println("***********************************************************") ;
+        System.out.println(" Règles : Vous contrôlez un pingouin qui se déplace sur un") ;
+        System.out.println(" océan d'icebergs et de poissons. Vous devez manger tous") ;
+        System.out.println(" les poissons avant que votre pingouin ne meurt de faim.") ;
+        System.out.println(" Sachez que les poissons changent de direction quand ils") ;
+        System.out.println(" rencontrent un iceberg. Ainsi, plus il y a d'icebergs,") ;
+        System.out.println(" plus il est facile de manger. Toutefois, ces derniers") ;
+        System.out.println(" fondent à mesure du temps et certains poissons sont") ;
+        System.out.println(" cachés en dessous par peur de votre terrifiant pingouin !") ;
+        System.out.println(" Les poissons finissent par s'épuiser et mourir au bout") ;
+        System.out.println(" d'un certains nombre de tour.") ;
+        System.out.println("***********************************************************\n") ;
     }
 
     public void printControls()
@@ -116,8 +121,6 @@ public class Jeu
         while (run)
         {
             printControls() ;
-
-            System.out.println("tour numéro " + nbTour) ;
 
             choix = scan.nextLine() ;
             run = false ;
@@ -181,6 +184,37 @@ public class Jeu
             if ( nbTour % fondreSeuil == 0 ) // fondreSeuil = 5
             {
                 sea.fondre(fondreQuotient) ;
+            }
+
+            /* CONDITIONS DE TEST POUR LA FIN DU JEU */
+
+            // On vérifie si il y a encore des poissons vivants dans l'océan
+            if ( sea.areFishsAllDead() )
+            {
+                run = false ;
+                if ( sea.getPing().ateEnough(sea) )
+                {
+                    System.out.println("*****************************************************") ;
+                    System.out.println("FELICITATIONS ! VOUS AVEZ MANGE ASSEZ DE POISSONS !") ;
+                    System.out.println("Rejouer ? O/N") ;
+                    choix = scan.nextLine() ;
+                    System.out.println("*****************************************************\n") ;
+                }
+                else
+                {
+                    System.out.println("*******************************************************") ;
+                    System.out.println("GAME OVER ! VOUS N'AVEZ PAS MANGE ASSEZ DE POISSONS !") ;
+                    System.out.println("Rejouer ? O/N") ;
+                    choix = scan.nextLine() ;
+                    System.out.println("*******************************************************\n") ;
+                }
+
+                if ( choix.equals("O") || choix.equals("o") )
+                {
+                    run = true ;
+                    sea = new Ocean(4,500,500) ;
+                    image.setColors(sea.getColors()) ;
+                }
             }
 
             // On vérifie si le pingouin n'est pas mort

@@ -14,8 +14,8 @@ public class Poisson
 
 	// On genère un seuil de déplacement auquel au delà de ce dernier, le poisson est considéré comme fatigué / mort
 	private Random g = new Random() ;
-	final private int thresholdTired = 40 + g.nextInt(21) ;
-	final private int thresholdDeath = 80 + g.nextInt(21) ;
+	final private int thresholdTired = 50 + g.nextInt(21) ;
+	final private int thresholdDeath = 100 + g.nextInt(21) ;
 
 	// Ces champs indiqueront la jauge de fin du poisson (sa couleur dépend du nombre de mouvement)
 	// Couleur : [4 : normal] [5 : fatigué]
@@ -161,17 +161,19 @@ public class Poisson
 		// Pour dessiner un poisson, on part du point situé en bas à gauche et on dessine un rectangle vers la droite
 		// ainsi on se ramène en quelque sorte à la méthode collision d'un iceberg avec le point en bas à gauche et en haut à droite
 		
+		double sens = ( this.movement == "po" || this.movement == "pa" ) ? 1. : -1. ;
+
 		// On test si le point bas gauche du poisson est inférieur en abscisse au coint haut droit de l'iceberg
-    	boolean bas_gauche_abs = (this.getAbscisse() + this.largeur <= ice.coinEnHautADroite().getAbscisse()) ;
+    	boolean bas_gauche_abs = (this.getAbscisse() + sens * this.largeur <= ice.coinEnHautADroite().getAbscisse()) ;
 
     	// On test si le point bas gauche du poisson est inférieur en ordonné au coint haut droit de l'iceberg
-    	boolean bas_gauche_ord = (this.getOrdonnee() + this.hauteur <= ice.coinEnHautADroite().getOrdonnee()) ;
+    	boolean bas_gauche_ord = (this.getOrdonnee() + sens * this.hauteur <= ice.coinEnHautADroite().getOrdonnee()) ;
 
     	// On test si le point droit haut du poisson est supérieur en ordonnée au coin bas gauche de l'iceberg
-    	boolean haut_droit_ord = (this.getOrdonnee() + 2 * this.hauteur >= ice.coinEnBasAGauche().getOrdonnee()) ;
+    	boolean haut_droit_ord = (this.getOrdonnee() + 2 * sens * this.hauteur >= ice.coinEnBasAGauche().getOrdonnee()) ;
 
     	// On test si le point droit haut du poisson est supérieur en abscisse au coin bas gauche de l'iceberg
-    	boolean haut_droit_abs = (this.getAbscisse() + 2 * this.largeur >= ice.coinEnBasAGauche().getAbscisse()) ;
+    	boolean haut_droit_abs = (this.getAbscisse() + 2 * sens * this.largeur >= ice.coinEnBasAGauche().getAbscisse()) ;
 
     	return ( bas_gauche_abs && bas_gauche_ord && haut_droit_ord && haut_droit_abs ) ;
 	}
