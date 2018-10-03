@@ -1,6 +1,12 @@
 package glaces ;
 import geometrie.Point ;
 
+/**
+ * Représentation d'un pingouin dans un océan
+ * @author Faucher Aurélien
+ * @version Octobre 2018
+ */
+
 public class Pingouin
 {
     private Point position ;
@@ -25,17 +31,11 @@ public class Pingouin
     // Ce champ indique de combien de pixels le pingouin se déplace en sachant qu'en grossissant, il ralentit
     private double speed ;
 
-    public Pingouin()
-    {
-        this.position = new Point(0.,0.) ;
-        this.size = 0 ;
-        this.nbMovement = 0 ;
-        this.alive = true ;
-        this.color = 2 ;
-        this.nbFishEaten = 0 ;
-        this.speed = 0 ;
-    }
-    
+    /**
+     * Construction selon un point indiquant une position de spawn et un entier représentant la taille du pingouin
+     * @param pos point représentant la position du pingouin
+     * @param size taille du pingouin (représenté par un carré)
+     */
     public Pingouin(Point pos, int size)
     {
         this.position = new Point(pos) ;
@@ -50,6 +50,10 @@ public class Pingouin
     /*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Méthode de déplacement sur les abscisses
+     * @param x déplacement à effectuer sur les abscisses
+     */
     public void deplacerAbscisse(double x)
     {
         this.position.deplacer(x, 0.) ;
@@ -58,6 +62,10 @@ public class Pingouin
         this.isDead() ;
     }
     
+    /**
+     * Méthode de déplacement sur les ordonnées
+     * @param y déplacement à effectuer sur les ordonnées
+     */
     public void deplacerOrdonnee(double y)
     {
         this.position.deplacer(0., y) ;
@@ -69,37 +77,64 @@ public class Pingouin
     /*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Réel de l'abscisse du pingouin
+     * @return l'abscisse du pingouin
+     */
     public double getAbscisse()
     {
         return this.position.getAbscisse() ;
     }   
 
+    /**
+     * Réel de l'ordonnée du pingouin
+     * @return l'ordonnée du pingouin
+     */
     public double getOrdonnee()
     {
         return this.position.getOrdonnee() ;
     }
     
+    /**
+     * Entier représentant la taille du pingouin
+     * @return taille du pingouin
+     */
     public int getSize()
     {
         return this.size ;
     }
     
-
+    /**
+     * Entier correspondant à la couleur du pingouin
+     * @return couleur du pingouin
+     */
     public int getItsColor()
     {
         return this.color ;
     }
 
+    /**
+     * Booléen qui décrit l'état de vie du pingouin
+     * @return si le pingouin est vivant/mort
+     */
     public boolean isAlive()
     {
         return this.alive ;
     }
 
+    /**
+     * Combien de mouvements le pingouin a-t-il effectué ?
+     * @return nombre de mouvements effectués depuis le début du jeu
+     */
     public int howManyMovements()
     {
         return this.nbMovement ;
     }
 
+    /**
+     * Vitesse de déplacement du pingouin
+     * @return vitesse du pingouin
+     */
     public double getSpeed()
     {
         return this.speed ;
@@ -108,6 +143,9 @@ public class Pingouin
     /*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Méthode qui change la couleur du pingouin s'il est fatigué
+     */
     private void isTired()
     {
         if (this.nbMovement >= this.thresholdHungry)
@@ -121,6 +159,9 @@ public class Pingouin
         }
     }
 
+    /**
+     * Méthode qui change la couleur/l'état de vie du pingouin s'il est mort de faim
+     */
     private void isDead()
     {
         if (this.nbMovement == this.thresholdDeath)
@@ -130,18 +171,25 @@ public class Pingouin
         }
     }
 
+    /**
+     * Méthode qui modifie la taille/vitesse du pingouin s'il mange un poisson
+     */
     public void ateFish()
     {
         this.nbMovement = 0 ;
         this.nbFishEaten += 1 ;
-        if ( this.nbFishEaten % 7 == 0 )
+        if ( this.nbFishEaten % 10 == 0 )
         {
+            // On fait grossir notre pingouin et on réduit sa vitesse
             this.size += 5 ;
             this.speed -= 1. ;
         }
-        System.out.println("A MANGE") ;
     }
 
+    /**
+     * Méthode qui vérifie si le pingouin monte sur un iceberg
+     * @param ice l'iceberg sur lequel le pingouin monte
+     */
     public void jumpOnIceberg(Iceberg2D ice)
     {
         double facteurDeCasse = 1./4. ;
@@ -159,6 +207,11 @@ public class Pingouin
             ice.casserGauche(facteurDeCasse) ;
     }
 
+    /**
+     * Est-ce que le pingouin a assez mangé pour avoir gagné le jeu ?
+     * @param sea océan sur lequel le pingouin se déplace
+     * @return un booléen indiquant si le pingouin a mangé à sa faim
+     */
     public boolean ateEnough(Ocean sea)
     {
         return ( this.nbFishEaten >= sea.getNbFish() / 2 ) ;
@@ -167,6 +220,10 @@ public class Pingouin
     /*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Vérifie si le pingouin monte sur un iceberg par la partie du bas
+     * @param ice iceberg concerné par le pingouin
+     */
     private boolean checkBottom(Iceberg2D ice)
     {
         boolean basGaucheAbs ;
@@ -187,6 +244,10 @@ public class Pingouin
         return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
     }
 
+    /**
+     * Vérifie si le pingouin monte sur un iceberg par la partie droite
+     * @param ice iceberg concerné par le pingouin
+     */
     private boolean checkRight(Iceberg2D ice)
     {
         boolean basGaucheAbs ;
@@ -207,6 +268,10 @@ public class Pingouin
         return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
     }
 
+    /**
+     * Vérifie si le pingouin monte sur un iceberg par la partie du haut
+     * @param ice iceberg concerné par le pingouin
+     */
     private boolean checkTop(Iceberg2D ice)
     {
         boolean basGaucheAbs ;
@@ -227,6 +292,10 @@ public class Pingouin
         return ( basGaucheAbs && basDroitAbs && basGaucheOrd && hautDroitOrd ) ;
     }
 
+    /**
+     * Vérifie si le pingouin monte sur un iceberg par la partie gauche
+     * @param ice iceberg concerné par le pingouin
+     */
     private boolean checkLeft(Iceberg2D ice)
     {
         boolean basGaucheAbs ;

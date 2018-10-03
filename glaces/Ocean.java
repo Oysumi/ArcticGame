@@ -2,6 +2,11 @@ package glaces ;
 import geometrie.Point ;
 import java.util.Random ;
 
+/**
+ * Un océan d'icebergs, de poissons et possedant un pingouin
+ * @author Faucher Aurélien
+ * @version Octobre 2018
+ */
 public class Ocean
 {
 	private int hauteur ;
@@ -11,9 +16,11 @@ public class Ocean
 	private Poisson[] fish ;
 	private int nbFish ;
 	private int nbreIceberg ;
-	final private double moveFish = 4. ;
 	private Random g = new Random() ; // on lui attribue un random pour éviter la multiplication des objets morts
 
+	/**
+	 * Construction d'un océan de 300x300 avec 2 icebergs et 20 poissons
+	 */
 	public Ocean()
 	{
 		this.largeur = 300 ;
@@ -38,8 +45,19 @@ public class Ocean
 		}
 	}
 
+	/** Construction par nombre d'icebergs et taille
+	 * @param nbreIceberg nombre d'icebergs dans l'océan
+	 * @param largeur largeur de l'océan
+	 * @param hauteur hauteur de l'océan
+	 * Uniquement des entiers positifs
+	 * @exception AssertionError si nbreIceberg ou largeur ou hauteur négatif ou nul
+	 */
 	public Ocean(int nbreIceberg, int largeur, int hauteur)
 	{
+		assert(nbreIceberg>0):"Erreur : nombre d'iceberg négatif ou nul" ;
+		assert(largeur>0):"Erreur : largeur négative ou nulle" ;
+		assert(hauteur>0):"Erreur : hauteur négative ou nulle" ;
+
 		this.largeur = largeur ;
 		this.hauteur = hauteur ;
 		this.ice = new Iceberg2D[nbreIceberg] ;
@@ -75,27 +93,47 @@ public class Ocean
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Entier représentant la largeur de l'océan
+     * @return la largeur de l'océan
+     */
 	public int getWidth()
 	{
 		return this.largeur ;
 	}
 
+	/** 
+	 * Entier représentant la hauteur de l'océan
+	 * @return la hauteur de l'océan
+	 */
 	public int getHeight()
 	{
 		return this.hauteur ;
 	}
 
+	/** 
+	 * Entier correspondant au nombre d'icebergs sur l'océan
+	 * @return nombre d'icebergs
+	 */
 	public int getCount()
 	{
 		return this.ice.length ;
 	}
 
-	// Nous sommes obligés ici de fournir un accès au pingouin de l'océan pour le déplacer
+	/** 
+	 * Nous sommes obligés ici de fournir un accès au pingouin de l'océan pour le déplacer
+	 * Retourne le pingouin de l'océan
+	 @return le pingouin
+	 */
 	public Pingouin getPing()
 	{
 		return this.ping ;
 	} 
 
+	/**
+	 * Nombre de poissons dans l'océan
+	 * @return nombre de poissons
+	 */
 	public int getNbFish()
 	{
 		return this.nbFish ;
@@ -113,6 +151,10 @@ public class Ocean
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Fait fondre l'intégralité des icebergs présents sur l'océan
+     * @param fr facteur de fonte
+     */
 	public void fondre(double fr)
 	{
 		for ( Iceberg2D i : this.ice )
@@ -121,20 +163,13 @@ public class Ocean
 		}
 	}
 
+	/**
+	 * Récupère un tableau d'entiers qui sont en bijection avec des couleurs
+	 * @return tableau d'entiers représentant des couleurs
+	 */
 	public int[][] getColors()
 	{
 		int[][] colors = new int[this.getHeight()][this.getWidth()] ;
-
-		/* MEMO
-		 * 0 : bleu
-		 * 1 : blanc 
-		 * 2 : orange / brun (daltonisme)
-		 * 3 : orange plus foncé
-		 * 4 : jaune / vert kaki
-		 * 5 : jaune / vert pâle
-		 * 6 : vert
-		 * 7 : rose / violet
-		*/
 
 		// Dessinons les poissons VIVANTS
 		for ( Poisson p : this.fish )
@@ -212,6 +247,9 @@ public class Ocean
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Fait bouger l'intégralité des poissons selon leur sens de déplacement
+     */
 	public void moveFish()
 	{
 		for ( Poisson p : this.fish )
@@ -230,6 +268,10 @@ public class Ocean
 		}
 	}
 
+	/**
+	 * Est-ce que tous les poissons de l'océan sont morts ?
+	 * @return un booléen qui dit si oui ou non il reste encore des poissons vivants
+	 */
 	public boolean areFishsAllDead()
 	{
 		boolean dead = false ;

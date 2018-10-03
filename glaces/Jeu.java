@@ -1,16 +1,29 @@
 package glaces ;
 import java.util.Scanner ;
 
+/**
+ * Un jeu dont où l'on contrôle un pingouin qui doit manger des poissons
+ * @author Faucher Aurélien
+ * @version Octobre 2018
+ */
+
 public class Jeu
 {   
-    // CONSTRUCTEUR INUTILE
+    /**
+     * Constructeur inutile
+     */
     public Jeu()
     { } 
     
     /*********************************************************************************************/
     /*********************************************************************************************/
 
-    // METHODES DE DEPLACEMENT
+    /* METHODES DE DEPLACEMENT */
+
+    /**
+     * Fait bouger le pingouin vers l'avant
+     * @param sea l'océan dans lequel le pingouin se trouve
+     */
     public void moveForward(Ocean sea)
     {
         if ( sea.getPing().getOrdonnee() + sea.getPing().getSize() + sea.getPing().getSpeed() < sea.getHeight() )
@@ -23,6 +36,10 @@ public class Jeu
         }
     }
 
+    /**
+     * Fait bouger le pingouin vers l'arrière
+     * @param sea l'océan dans lequel le pingouin se trouve
+     */
     public void moveBackward(Ocean sea)
     {
         if ( sea.getPing().getOrdonnee() > 0 )
@@ -35,6 +52,10 @@ public class Jeu
         }
     }
 
+    /**
+     * Fait bouger le pingouin vers la droite
+     * @param sea l'océan dans lequel le pingouin se trouve
+     */
     public void moveRight(Ocean sea)
     {
         if ( sea.getPing().getAbscisse() < sea.getWidth() )
@@ -47,6 +68,10 @@ public class Jeu
         }
     }
 
+    /**
+     * Fait bouger le pingouin vers la gauche
+     * @param sea l'océan dans lequel le pingouin se trouve
+     */
     public void moveLeft(Ocean sea)
     {
         if ( sea.getPing().getAbscisse() - sea.getPing().getSize() - sea.getPing().getSpeed() > 0 )
@@ -62,7 +87,11 @@ public class Jeu
     /*********************************************************************************************/
     /*********************************************************************************************/
 
-    // Méthode d'affichage de texte
+    /* MÉTHODES D'AFFICHAGE DE TEXTE */
+
+    /**
+     * Affiche les règles du jeu
+     */
     private void printRules()
     {
         System.out.println("----------------------") ;
@@ -82,6 +111,9 @@ public class Jeu
         System.out.println("********************************************************************************\n") ;
     }
 
+    /**
+     * Affiche les contrôles du jeu
+     */
     private void printControls()
     {
         System.out.println("------------------------------------") ;
@@ -95,7 +127,11 @@ public class Jeu
     /*********************************************************************************************/
     /*********************************************************************************************/
     
-    // METHODE DE JEU
+    /* MÉTHODES DU JEU */
+
+    /**
+     * Méthode principale qui permet de jouer
+     */
     public void jouer()
     {
         Jeu game = new Jeu() ;
@@ -116,13 +152,18 @@ public class Jeu
         final int fondreSeuil = 10 ;
         final double fondreQuotient = 1./10. ;
 
+        // On affiche les règles du jeu la première fois que l'utilisateur ouvre le jeu
         printRules() ;
 
         while (run)
         {
+            // On affiche les contrôles à chaque itération de jeu
             printControls() ;
 
+            // On demande à l'utilisateur ce qu'il veut faire
             choix = scan.nextLine() ;
+
+            // On met d'office run à faux pour faciliter la boucle
             run = false ;
 
             switch (choix)
@@ -174,7 +215,7 @@ public class Jeu
             // On incrémante le compteur de tours
             nbTour += 1 ;
 
-            // On délace les poissons après un déplacement
+            // On déplace les poissons après un déplacement du pingouin
             sea.moveFish() ;
 
             // On réactualise le tableau de l'océan et donc l'image à l'écran
@@ -243,6 +284,10 @@ public class Jeu
     /*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Fonction lançant le jeu
+     * @param args argument de la fonction main si besoin
+     */
     public static void main(String[] args)
     {
         Jeu myGame = new Jeu() ;

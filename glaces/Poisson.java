@@ -2,6 +2,12 @@ package glaces ;
 import geometrie.Point ;
 import java.util.Random ;
 
+/**
+ * Représentation d'un poisson dans un océan
+ * @author Faucher Aurélien
+ * @version Octobre 2018
+ */
+
 public class Poisson
 {
 	private Point position ;
@@ -10,14 +16,14 @@ public class Poisson
 	private String movement ;
 
 	// Déplacement en abscisse ou ordonnée commun à tous les poissons
-	private static double moveXOrY = 2. ;
+	private final static double moveXOrY = 2. ;
 
 	// On genère un seuil de déplacement auquel au delà de ce dernier, le poisson est considéré comme fatigué / mort
 	private Random g = new Random() ;
 	final private int thresholdTired = 90 + g.nextInt(21) ;
 	final private int thresholdDeath = 180 + g.nextInt(21) ;
 
-	// Ces champs indiqueront la jauge de fin du poisson (sa couleur dépend du nombre de mouvement)
+	// Ces champs indiqueront la jauge de fatigue du poisson (sa couleur dépend du nombre de mouvement)
 	// Couleur : [4 : normal] [5 : fatigué]
 	private int nbMovement ;
 	private int color ;
@@ -25,20 +31,19 @@ public class Poisson
 	// Ce champ explicite indique si le poisson est vivant ou mort (ainsi facilite son affichage ou non)
 	private boolean alive ;
 
-	public Poisson()
-	{
-		this.position = new Point(0.,0.) ;
-		this.hauteur = 0 ;
-		this.largeur = 0 ;
-		this.movement = "none" ;
-		this.nbMovement = 0 ;
-		this.color = 4 ;
-		this.alive = true ;
-	}
-
-	// Pour plus de pseudo aléatoire, on génère son mouvement dans le constructeur
+	/**
+	 * Construction par une position, une largeur et une hauteur
+	 * @param pos point définissant la position du poisson
+	 * @param height hauteur du poisson
+	 * @param width largeur du poisson
+	 * la largeur et la hauteur doivent être positives
+	 * @exception AssertionError si largeur ou hauteur négative ou nulle
+	 */
 	public Poisson(Point pos, int height, int width)
 	{
+		assert(height>0):"Erreur : hauteur négative ou nulle" ;
+		assert(width>0):"Erreur : largeur négative ou nulle" ;
+		
 		this.position = new Point(pos) ;
 		this.nbMovement = 0 ;
 		this.color = 4 ;
@@ -84,36 +89,64 @@ public class Poisson
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Réel de l'abscisse du poisson
+     * @return l'abscisse du poisson
+     */
 	public double getAbscisse()
 	{
 		return this.position.getAbscisse() ;
 	}
 
+	/**
+	 * Réel de l'ordonnée du poisson
+	 * @return l'ordonnée du poisson
+	 */
 	public double getOrdonnee()
 	{
 		return this.position.getOrdonnee() ;
 	}
 
+	/**
+	 * Entier représentant la largeur du poisson
+	 * @return largeur du poisson
+	 */
 	public int getWidth()
 	{
 		return this.largeur ;
 	}
 
+	/**
+	 * Entier représentant la hauteur du poisson
+	 * @return hauteur du poisson
+	 */
 	public int getHeight()
 	{
 		return this.hauteur ;
 	}
 
+	/**
+	 * Chaîne de caractères qui décrit le mouvement du poisson
+	 * @return le type de mouvement du poisson
+	 */
 	public String getMov()
 	{
 		return this.movement ;
 	}
 
+	/**
+	 * Entier représentant la couleur de poisson
+	 * @return couleur du poisson
+	 */
 	public int getItsColor()
 	{
 		return this.color ;
 	}
 
+	/**
+	 * Booléen indiquant si le poisson est vivant ou mort
+	 * @return si le poisson est vivant ou non
+	 */
 	public boolean isAlive()
 	{
 		return this.alive ;
@@ -122,6 +155,9 @@ public class Poisson
 	/*************************************************************************************************************/
 	/*************************************************************************************************************/
 
+	/**
+	 * Méthode de déplacement du poisson selon son sens de mouvement
+	 */
 	public void deplacement()
 	{
 		switch (this.movement)
@@ -149,6 +185,9 @@ public class Poisson
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
+    /**
+     * Méthode qui change ou non la couleur du poisson selon son état de fatigue
+     */
 	private void isTired()
 	{
 		if (this.nbMovement == this.thresholdTired)
@@ -157,6 +196,9 @@ public class Poisson
 		}
 	}
 
+	/**
+	 * Méthode qui fixe l'état de vie du poisson à mort si besoin
+	 */
 	private void isDead()
 	{
 		if (this.nbMovement == this.thresholdDeath)
@@ -168,8 +210,13 @@ public class Poisson
 	/*********************************************************************************************/
     /*********************************************************************************************/
 
-    // Cette méthode permet d'anticiper un tour à l'avance si le poisson risque de percuter un iceberg
-    // ce qui explique la présence d'une addition avec sa largeur
+    /**
+     * Cette méthode permet d'anticiper un tour à l'avance si le poisson risque de percuter un iceberg
+     * ce qui explique la présence d'une addition de son abscisse avec sa largeur et respectivement de
+     * son ordonnée avec sa hauteur
+     * @param ice iceberg sur lequel on test la collision
+     * @return un booléen qui dit si oui ou non le poisson percute l'iceberg
+     */
 	public boolean collidesIceberg(Iceberg2D ice)
 	{
 		// Pour dessiner un poisson, on part du point situé en bas à gauche et on dessine un rectangle vers la droite
@@ -192,6 +239,10 @@ public class Poisson
     	return ( bas_gauche_abs && bas_gauche_ord && haut_droit_ord && haut_droit_abs ) ;
 	}
 
+	/**
+	 * Méthode qui permet de changer le mouvement du poisson s'il rencontre un iceberg
+	 * et qui redéfinit ses dimensions selon son mouvement
+	 */
 	public void changeDirection()
 	{
 		int alea = this.g.nextInt(10) ;
@@ -212,6 +263,10 @@ public class Poisson
 		this.hauteur = temp ;
 	}
 
+	/**
+	 * Méthode qui vérifie si un poisson sort de l'écran ou non et le remet dans le droit chemin
+	 * @param sea océan dans lequel le poisson se situe
+	 */
 	public void outOfSea(Ocean sea)
 	{
 		// On vérifie si il n'y a pas de problèmes quand on va accéder aux cases du tableau
@@ -251,6 +306,11 @@ public class Poisson
 		}
 	}
 
+	/**
+	 * Méthode qui vérifie si le poisson a été mangé par le pingouin et dans ce cas, on le passe à mort
+	 * et on appelle une méthode du pingouin qui incrémente son compteur de poisson mangé
+	 * @param ping pingouin qui risque d'avoir mangé le poisson
+	 */
 	public void getEaten(Pingouin ping)
 	{
 		// On test si le poisson est encore vivant, car une fois mort il est toujours présent dans l'océan mais n'est juste

@@ -260,7 +260,11 @@ public class Iceberg2D {
     	return (this.coinEnHautADroite().getOrdonnee() >= i.coinEnHautADroite().getOrdonnee() ) ;
     }
 
-    // Fonction valeur absolue
+    /**
+     * Retourne la valeur absolue d'un réel
+     * @param d un réel
+     * @return sa valeur absolue
+     */
     private static double absol(double d)
     {
     	double res = 0 ;
@@ -275,7 +279,13 @@ public class Iceberg2D {
     	return res ;
     }
 
-    // Retourne le point inférieur
+    /**
+     * On construit un nouveau point à partir de deux points qui vérifie le cahier des charges de l'iceberg
+     * à savoir que le poing gauche inférieur ne peut être supérieur au point droit supérieur
+     * @param g premier point à comparer avec le second
+     * @param d second point à comparer avec le premier
+     * @return le point qui vérifie le critère de position des points de l'iceberg (coin en bas à gauche)
+     */
     private static Point inferieur(Point g, Point d)
     {
     	Point result ;
@@ -286,7 +296,13 @@ public class Iceberg2D {
     	return result = new Point(infX, infY) ;
     }
 
-    // Retourne le point supérieur
+    /**
+     * On construit un nouveau point à partir de deux points qui vérifie le cahier des charges de l'iceberg
+     * à savoir que le poing gauche inférieur ne peut être supérieur au point droit supérieur
+     * @param g premier point à comparer avec le second
+     * @param d second point à comparer avec le premier
+     * @return le point qui vérifie le critère de position des points de l'iceberg (coin en haut à droite)
+     */
     private static Point superieur(Point g, Point d)
     {
     	Point result ;
