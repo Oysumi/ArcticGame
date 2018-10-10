@@ -1,4 +1,5 @@
 package glaces.tests ;
+
 import glaces.Iceberg2D ;
 import geometrie.Point ;
 
